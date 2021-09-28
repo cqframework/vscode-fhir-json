@@ -56,7 +56,7 @@ export class FHIRJsonCompletionProvider implements CompletionItemProvider {
         const items: CompletionItem[] = [];
 
         for (const i of ids) {
-            items.push({ label: `"${i.resourceType}/${i.id}"`, kind: CompletionItemKind.Value, insertText: ` "${i.resourceType}/${i.id}"` });
+            items.push({ label: `${i.resourceType}/${i.id}`, kind: CompletionItemKind.Value, insertText: ` "${i.resourceType}/${i.id}"` });
         }
 
         return new CompletionList(items);

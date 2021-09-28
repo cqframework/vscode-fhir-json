@@ -14,23 +14,38 @@ export class FHIRJsonCompletionProvider implements CompletionItemProvider {
 
         const parent = path.resolve(document.uri.fsPath, "../..");
 
-        const patientDir = path.join(parent, "Patient");
-
-        if (!fs.existsSync(patientDir)) {
+        if (!fs.existsSync(parent)) {
             return null;
         }
 
-        const ids: string[] = [];
-        const files = fs.readdirSync(patientDir);
+        const files = fs.readdirSync(parent);
+
+        const ids: { resourceType: string, id: string }[] = [];
+
+        // TODO: This is hard-coded to the current IG tests directory structure. Ideally,
+        // this would be detected based on some IG config.
+        // Also, glob patterns or something would be better.
         for (const f of files) {
-            var name = path.join(patientDir, f);
-            if (fs.statSync(name).isDirectory()) {
+            var child = path.join(parent, f);
+            // Ignore root files
+            if (!fs.statSync(child).isDirectory()) {
                 continue;
             } else {
-                const resource = JSON.parse(fs.readFileSync(name, "utf8"));
-                if (resource.resourceType && resource.resourceType === "Patient" && resource.id) {
-                    ids.push(resource.id);
+                const childFiles = fs.readdirSync(child);
+                for (const c of childFiles) {
+                    var childPath = path.join(child, c);
+                    if (fs.statSync(childPath).isDirectory()) {
+                        continue;
+                    }
+                    else {
+                        const resource = JSON.parse(fs.readFileSync(childPath, "utf8"));
+                        if (resource.resourceType && resource.id) {
+                            ids.push({ resourceType: resource.resourceType, id: resource.id });
+                        }
+
+                    }
                 }
+
             }
         }
 
@@ -41,7 +56,7 @@ export class FHIRJsonCompletionProvider implements CompletionItemProvider {
         const items: CompletionItem[] = [];
 
         for (const i of ids) {
-            items.push({ label: `"Patient/${i}"`, kind: CompletionItemKind.Value, insertText: ` "Patient/${i}"` });
+            items.push({ label: `"${i.resourceType}/${i.id}"`, kind: CompletionItemKind.Value, insertText: ` "${i.resourceType}/${i.id}"` });
         }
 
         return new CompletionList(items);

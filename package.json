@@ -11,7 +11,7 @@
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/cqframework/vscode-fhir-json"
-	  },
+	},
 	"icon": "icons/cqframework.png",
 	"categories": [
 		"Other"
@@ -37,6 +37,9 @@
 		"pretest": "npm run test-compile && npm run compile && npm run lint",
 		"lint": "eslint src --ext ts",
 		"test": "node ./out/test/runTest.js"
+	},
+	"dependencies": {
+		"jsonc-parser": "^3.0.0"
 	},
 	"devDependencies": {
 		"@types/vscode": "^1.60.0",

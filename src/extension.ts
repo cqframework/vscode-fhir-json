@@ -1,10 +1,52 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as fs from 'fs';
 import path = require('path');
-import { TextDocumentContentProvider, workspace, ExtensionContext, Event, Uri, CancellationToken, ProviderResult, commands, window, EventEmitter } from 'vscode';
+import { getLocation } from 'jsonc-parser';
+import { TextDocumentContentProvider, workspace, ExtensionContext, Event, Uri, CancellationToken, ProviderResult, commands, window, EventEmitter, CompletionItemProvider, CompletionContext, CompletionItem, CompletionList, Position, TextDocument, languages, CompletionItemKind } from 'vscode';
 
 
+class FHIRJsonCompletionProvider implements CompletionItemProvider {
+	provideCompletionItems(document: TextDocument, position: Position, token: CancellationToken, context: CompletionContext): ProviderResult<CompletionItem[] | CompletionList<CompletionItem>> {
+		const offset = document.offsetAt(position);
+		const location = getLocation(document.getText(), offset);
+		if (!location.matches(["*", "reference"])) {
+			return null;
+		}
+
+		const parent = path.resolve(document.uri.fsPath, "../..");
+
+		const patientDir = path.join(parent, "Patient");
+
+		if (!fs.existsSync(patientDir)) {
+			return null;
+		}
+
+		const ids: string[] = [];
+		const files = fs.readdirSync(patientDir);
+		for (const f of files){
+			var name = path.join(patientDir, f);
+			if (fs.statSync(name).isDirectory()){
+				continue;
+			} else {
+				const resource = JSON.parse(fs.readFileSync(name, "utf8"));
+				if (resource.resourceType && resource.resourceType === "Patient" && resource.id) {
+					ids.push(resource.id);
+				}
+			}
+		}
+
+		if (ids.length === 0) {
+			return null;
+		}
+
+		const items: CompletionItem[] = [];
+
+		for (const i of ids) {
+			items.push({ label: `"Patient/${i}"`, kind : CompletionItemKind.Value, insertText: ` "Patient/${i}"`});
+		}
+
+		return new CompletionList(items);
+	}
+}
 class FHIRJsonSchemaProvider implements TextDocumentContentProvider {
 
 	private _extensionPath: string;
@@ -55,7 +97,6 @@ class FHIRJsonSchemaProvider implements TextDocumentContentProvider {
 	}
 
 	convertFhirVersion(versionNumber: string) {
-
 		if (versionNumber.startsWith("5") || versionNumber === "4.6.0") {
 			return "r5";
 		}
@@ -63,7 +104,7 @@ class FHIRJsonSchemaProvider implements TextDocumentContentProvider {
 			return "r4";
 		}
 		else if (versionNumber.startsWith("3")) {
-			return "dstu3"
+			return "dstu3";
 		}
 		else {
 			return "r4";
@@ -83,6 +124,9 @@ export function activate(context: ExtensionContext) {
 	fileSystemWatcher.onDidCreate(e => fhirSchemaProvider.updateFhirVersion(e));
 	fileSystemWatcher.onDidDelete(e => fhirSchemaProvider.updateFhirVersion(e));
 	fileSystemWatcher.onDidChange(e => fhirSchemaProvider.updateFhirVersion(e));
+
+	const completionProvider = new FHIRJsonCompletionProvider();
+	context.subscriptions.push(languages.registerCompletionItemProvider({ scheme: "file", language: "json"}, completionProvider, ":"));
 }
 
 // this method is called when your extension is deactivated

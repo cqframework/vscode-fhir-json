@@ -21,6 +21,21 @@
 	],
 	"main": "./dist/extension.js",
 	"contributes": {
+		"commands":[
+			{
+				"command": "ig.publish",
+				"title": "Publish IG"
+			}
+		],
+		"menus": {
+			"explorer/context": [
+				{
+					"command": "ig.publish",
+					"when": "explorerViewletVisible",
+					"group": "igPublish"
+				}
+			]
+		},
 		"jsonValidation": [
 			{
 				"fileMatch": "*.json",

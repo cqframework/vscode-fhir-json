@@ -1,8 +1,9 @@
 
-import { workspace, ExtensionContext, languages } from 'vscode';
+import { workspace, ExtensionContext, languages, commands } from 'vscode';
 import { subscribeToDocumentChanges as subscribeToChangesForDiagnostics } from './diagnostics';
 import { FHIRJsonCompletionProvider } from './fhirJsonCompletionProvider';
 import { FHIRJsonSchemaProvider } from './fhirJsonSchemaProvider';
+import { publishIg } from './ig-publish/igPublishingCommands';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -24,6 +25,9 @@ export function activate(context: ExtensionContext) {
 
 	// Register for document changes to publish diagnostics
 	subscribeToChangesForDiagnostics(context);
+
+	// Register actions for IG Publishing Context Menu
+	commands.registerCommand('ig.publish', publishIg);
 }
 
 // this method is called when your extension is deactivated

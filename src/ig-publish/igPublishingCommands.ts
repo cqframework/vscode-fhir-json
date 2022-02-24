@@ -10,13 +10,7 @@ const createAndShowTerminal = (): Terminal => {
   return terminal;
 };
 
-export const refreshIg = () => {
+export const runIGScripts = (scriptName: string): void => {
   const terminal = createAndShowTerminal();
-  terminal.sendText(generateCommand('_refresh.sh'));
+  terminal.sendText(generateCommand(scriptName));
 };
-
-export const updateCQFTooling = () => {
-  const terminal = createAndShowTerminal();
-  terminal.sendText(generateCommand('_updateCQFTooling.sh'));
-};
-

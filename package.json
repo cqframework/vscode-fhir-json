@@ -22,14 +22,10 @@
 	"main": "./dist/extension.js",
 	"contributes": {
 		"commands":[
-			{
-				"command": "ig.refresh",
-				"title": "Refresh IG"
-			},
-			{
-				"command": "ig.updateCQFTooling",
-				"title": "Update CQF Tooling"
-			}
+			{ "command": "ig.refresh", "title": "Refresh IG" },
+			{ "command": "ig.updateCQFTooling", "title": "Update CQF Tooling" },
+			{ "command": "ig.genonce", "title": "Generate IG" },
+			{ "command": "ig.updatePublisher", "title": "Update Publisher" }
 		],
 		"menus": {
 			"explorer/context": [
@@ -40,6 +36,16 @@
 				},
 				{
 					"command": "ig.updateCQFTooling",
+					"when": "explorerViewletVisible",
+					"group": "igActions"
+				},
+				{
+					"command": "ig.genonce",
+					"when": "explorerViewletVisible",
+					"group": "igActions"
+				},
+				{
+					"command": "ig.updatePublisher",
 					"when": "explorerViewletVisible",
 					"group": "igActions"
 				}

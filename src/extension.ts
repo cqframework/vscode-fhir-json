@@ -3,7 +3,7 @@ import { workspace, ExtensionContext, languages, commands, Task, ProcessExecutio
 import { subscribeToDocumentChanges as subscribeToChangesForDiagnostics } from './diagnostics';
 import { FHIRJsonCompletionProvider } from './fhirJsonCompletionProvider';
 import { FHIRJsonSchemaProvider } from './fhirJsonSchemaProvider';
-import { refreshIg, updateCQFTooling } from './ig-publish/igPublishingCommands';
+import { runIGScripts } from './ig-publish/igPublishingCommands';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -26,9 +26,12 @@ export function activate(context: ExtensionContext) {
 	// Register for document changes to publish diagnostics
 	subscribeToChangesForDiagnostics(context);
 
-	// Register actions for IG Refresh in Context Menu
-	commands.registerCommand('ig.refresh', () => refreshIg());
-	commands.registerCommand('ig.updateCQFTooling', () => updateCQFTooling());
+	// Register actions for IG Scripts in Context Menu (MacOS/Linux)
+	commands.registerCommand('ig.refresh', () => runIGScripts('_refresh.sh'));
+	commands.registerCommand('ig.updateCQFTooling', () => runIGScripts('_updateCQFTooling.sh'));
+	commands.registerCommand('ig.updatePublisher', () => runIGScripts('_updatePublisher.sh'));
+	commands.registerCommand('ig.genonce', () => runIGScripts('_genonce.sh'));
+
 }
 
 // this method is called when your extension is deactivated

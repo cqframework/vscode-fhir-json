@@ -1,5 +1,5 @@
 
-import { workspace, ExtensionContext, languages, commands, Task, ProcessExecution, ShellExecution } from 'vscode';
+import { workspace, ExtensionContext, languages, commands } from 'vscode';
 import { subscribeToDocumentChanges as subscribeToChangesForDiagnostics } from './diagnostics';
 import { FHIRJsonCompletionProvider } from './fhirJsonCompletionProvider';
 import { FHIRJsonSchemaProvider } from './fhirJsonSchemaProvider';

@@ -1,23 +1,22 @@
 import { window, workspace, Terminal } from 'vscode';
-import { exec } from 'child_process';
+
 const workSpacePath = workspace.workspaceFolders?.[0].uri.path;
 
+const generateCommand = (fileName: string): string => `${workSpacePath}/${fileName}`;
+
+const createAndShowTerminal = (): Terminal => {
+  const terminal = window.createTerminal();
+  terminal.show();
+  return terminal;
+};
+
 export const refreshIg = () => {
-  const pathAndScript: string = workSpacePath + '/_refresh.sh';
-  window.showInformationMessage(pathAndScript);
-  exec(pathAndScript, function (error, stdout, stderr) {
-    console.log(stdout);
-    if(error){ console.log(error); };
-    if(stderr){ console.log(stderr); };
-  });
+  const terminal = createAndShowTerminal();
+  terminal.sendText(generateCommand('_refresh.sh'));
 };
 
 export const updateCQFTooling = () => {
-  const pathAndScript: string = workSpacePath + '/_updateCQFTooling.sh';
-  window.showInformationMessage(pathAndScript);
-  exec(pathAndScript, function (error, stdout, stderr) {
-    console.log(stdout);
-    if(error){ console.log(error); };
-    if(stderr){ console.log(stderr); };
-  });
+  const terminal = createAndShowTerminal();
+  terminal.sendText(generateCommand('_updateCQFTooling.sh'));
 };
+

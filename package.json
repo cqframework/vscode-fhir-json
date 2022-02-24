@@ -23,16 +23,25 @@
 	"contributes": {
 		"commands":[
 			{
-				"command": "ig.publish",
-				"title": "Publish IG"
+				"command": "ig.refresh",
+				"title": "Refresh IG"
+			},
+			{
+				"command": "ig.updateCQFTooling",
+				"title": "Update CQF Tooling"
 			}
 		],
 		"menus": {
 			"explorer/context": [
 				{
-					"command": "ig.publish",
+					"command": "ig.refresh",
 					"when": "explorerViewletVisible",
-					"group": "igPublish"
+					"group": "igActions"
+				},
+				{
+					"command": "ig.updateCQFTooling",
+					"when": "explorerViewletVisible",
+					"group": "igActions"
 				}
 			]
 		},

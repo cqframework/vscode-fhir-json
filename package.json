@@ -21,6 +21,18 @@
 	],
 	"main": "./dist/extension.js",
 	"contributes": {
+		"commands": [ 
+			{ "command": "fhir.post", "title": "Post FHIR Resource" }
+		],
+		"menus": {
+			"explorer/context": [
+				{
+					"command": "fhir.post",
+					"when": "explorerViewletVisible",
+					"group": "fhirServer"
+				}
+			]
+		},
 		"jsonValidation": [
 			{
 				"fileMatch": "*.json",
@@ -39,7 +51,8 @@
 		"test": "node ./out/test/runTest.js"
 	},
 	"dependencies": {
-		"jsonc-parser": "^3.0.0"
+		"jsonc-parser": "^3.0.0",
+		"cross-fetch": "^3.1.5"
 	},
 	"devDependencies": {
 		"@types/vscode": "^1.60.0",

@@ -1,6 +1,6 @@
 import { Diagnostic, DiagnosticCollection, DiagnosticSeverity, ExtensionContext, languages, Range, TextDocument, window, workspace } from "vscode";
 import path = require('path');
-import { findNodeAtLocation, getLocation, getNodeValue, Node, parseTree } from 'jsonc-parser';
+import { findNodeAtLocation, getNodeValue, parseTree } from 'jsonc-parser';
 
 function refreshDiagnostics(doc: TextDocument, fhirJsonDiagnostics: DiagnosticCollection): void {
 	if (doc.languageId !== "json") {

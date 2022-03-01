@@ -2,7 +2,7 @@ import { window ,workspace, Uri } from "vscode";
 import { readFileSync } from 'fs';
 import fetch from "cross-fetch";
 
-const displayMessage = (message: string, error?: boolean ): void => {
+const displayMessage = (message: string, error?: boolean): void => {
   const { showInformationMessage, showErrorMessage } = window;
   console.log(message);
   error ? showErrorMessage(message) : showInformationMessage(message);
@@ -38,6 +38,6 @@ export const postResource = async (uri: Uri) => {
     body: JSON.stringify(fhirObject)
   });
 
-  response.ok ? displayMessage(`The resource was posted to ${fhirServerUrl} and the server responded with ${response.status}: ${response.statusText}`) :
-    displayMessage(`The resource was rejected by ${fhirServerUrl} and the server responded with ${response.status}: ${response.statusText}`, true);
+  const responseBody = JSON.stringify(await response.json());
+  response.ok ? displayMessage(responseBody) : displayMessage(responseBody, true);
 };

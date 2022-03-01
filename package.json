@@ -38,7 +38,17 @@
 				"fileMatch": "*.json",
 				"url": "fhirjson://schema"
 			}
-		]
+		],
+		"configuration": {
+			"title": "FHIR Server URL",
+			"properties": {
+				"fhir.serverUrl": {
+					"type":"string",
+					"default": null,
+					"description": "Specifies the FHIR Server to send resources to from the explorer context menu"
+				}
+			}
+		} 
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run package",

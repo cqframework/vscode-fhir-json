@@ -22,16 +22,18 @@
 	"main": "./dist/extension.js",
 	"contributes": {
 		"commands": [ 
-			{ "command": "fhir.post", "title": "Post FHIR Resource" }
+			{ "command": "fhir.put", "title": "Create/Update FHIR Resource" }
 		],
 		"menus": {
-			"explorer/context": [
-				{
-					"command": "fhir.post",
-					"when": "explorerViewletVisible",
-					"group": "fhirServer"
-				}
-			]
+			"explorer/context": [{
+				"command": "fhir.put",
+				"when": "explorerViewletVisible",
+				"group": "fhirServer"
+			}],
+			"editor/context": [{
+				"command": "fhir.put",
+				"group": "fhirServer"
+			}]
 		},
 		"jsonValidation": [
 			{

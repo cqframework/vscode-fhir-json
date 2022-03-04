@@ -27,7 +27,7 @@ export function activate(context: ExtensionContext) {
 	subscribeToChangesForDiagnostics(context);
 
 	// Register actions to send FHIR resources to a server
-	commands.registerCommand('fhir.post', uri => postResource(uri));
+	commands.registerCommand('fhir.put', uri => postResource(uri));
 }
 
 // this method is called when your extension is deactivated

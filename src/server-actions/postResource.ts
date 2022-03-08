@@ -3,9 +3,8 @@ import { readFileSync } from 'fs';
 import fetch from "cross-fetch";
 
 const displayMessage = (message: string, error?: boolean): void => {
-  const { showInformationMessage, showErrorMessage } = window;
   console.log(message);
-  error ? showErrorMessage(message) : showInformationMessage(message);
+  error ? window.showErrorMessage(message) : window.showInformationMessage(message);
 };
 
 const buildFhirUrl = async (resourceType: string, id: string): Promise<string> => {
@@ -29,7 +28,6 @@ export const postResource = async (uri: Uri) => {
   // @ts-ignore JSON.parse accepts both a buffer and string but TS throws an error 
   const fhirObject = JSON.parse(readFileSync(uri.fsPath));
   const { id, resourceType } = fhirObject;
-
   const fhirServerUrl: string = await buildFhirUrl(resourceType, id);
 
   const response = await fetch(fhirServerUrl, {
